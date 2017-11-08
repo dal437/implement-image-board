@@ -7,23 +7,27 @@
 	<body>
 		<h1><b>480Chan - Image Board!<b></h1>
 			<br>
+      <h2>Modifying...{{post.title}}</h2>
 			<br>
       <form method="POST" action="/delete/{{post._id}}">
-        {{#each images}}
-        <input type="checkbox" name="checkbox-1" />
+        {{#each post.images}}
+        <br>
+        <input type="checkbox" name="id" value="{{this._id}}" />
         <span>{{this.caption}}</span>
         <br/>
         <img src = "{{this.url}}" alt = "">
         {{/each}}
-
-        <button type = "Submit">Erase images</button>
+        <br>
+        <br>
+        <button type = "Submit">Submit</button>
       </form>
-
-      <form method = "POST" action = "/add/post">
-        Image URL: <input type = "text" name = "url" />
+      <br>
+      <br>
+      <form method = "POST" action = "/add/image/{{post.slug}}">
+        Image URL: <input type = "text" name = "url"/>
         Caption: <input type = "text" name = "caption"/>
 
-        <button type = Submit>Add images</button>
+        <button type = "Submit">Add Another</button>
       </form>
 
 	</body>

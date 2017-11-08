@@ -2,20 +2,11 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-//const session = require('express-session');
 const models = require('./db');
 
-// Server constants
-/*const sessionOptions = {
-    secret: 'secretWord',
-    saveUninitialized: false,
-    resave: false,
-};*/
-
-// Configure appi
+// Configure app
 app.set('view engine', 'hbs');
 app.use(bodyParser.urlencoded({ extended: false }));
-//app.use(session(sessionOptions));
 
 // Set up routes
 app.get('/image-posts', (req, res) => {
@@ -24,7 +15,42 @@ app.get('/image-posts', (req, res) => {
 });
 
 app.get('/image-posts/:slug', (req, res) => {
-  
+  models.ImagePostModel.findOne({slug: req.params.slug}).populate('images').exec((err, post) =>
+  res.render('image-post-detail.hbs', { post }));
+});
+
+app.post('/add/image/:slug', (req, res) => {
+  const caption = req.body.caption;
+  const slug = req.params.slug;
+  const url = req.body.url;
+
+  const addedimage = new models.ImageModel({
+    caption,
+    url,
+  });
+  addedimage.save((err, newImageSaved) => {
+    models.ImagePostModel.findOneAndUpdate({slug}, {$push: {images: newImageSaved._id}}, {new: true, upsert: true},
+      (err, newPost) => res.redirect('/image-posts/' + slug));
+  });
+});
+
+app.post('/delete/:postId', (req, res) => {
+  const postId = req.params.postId;
+
+  let ids;
+  if (Array.isArray(req.body.id)){
+    ids = req.body.id;
+  }
+  else {
+    ids = [req.body.id];
+  }
+
+  models.ImagePostModel.findOne({_id: postId}, (err, post) => {
+    for (const i in ids) {
+      post.images.remove(ids[i]);
+    }
+    post.save(err => res.redirect('/image-posts/' + post.slug));
+  });
 });
 
 app.post('/new-image', (req, res) => {
@@ -61,7 +87,7 @@ app.post('/new-image', (req, res) => {
       });
       console.log(newImages);
     }
-  })
+  });
 
 });
 
