@@ -12,11 +12,11 @@ const Image = new Schema({
 
 // my schema goes here!
 const ImagePost = new Schema({
-    title: String,
-    images: [Image]
+    title: {type:String, required: true, trim: true},
+    images: {type: [{type: Schema.Types.ObjectId, ref: 'Image'}], required: true}
 });
 
-ImagePost.plugin(URLSlugs("title images"), {field: 'title'});
+ImagePost.plugin(URLSlugs('title'));
 
 const ImageModel = mongoose.model('Image', Image);
 const ImagePostModel = mongoose.model('ImagePost', ImagePost);

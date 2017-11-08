@@ -19,12 +19,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Set up routes
 app.get('/image-posts', (req, res) => {
-  models.ImagePostModel.find({},
-    (err, posts) => res.render('index.hbs', { posts }));
+    models.ImagePostModel.find().populate('images').exec((err, posts) =>
+    res.render('index.hbs', { posts }));
+});
+
+app.get('/image-posts/:slug', (req, res) => {
+  
 });
 
 app.post('/new-image', (req, res) => {
-  console.log(req.body);
 
   const images = [];
   const title = req.body.title;
@@ -41,26 +44,25 @@ app.post('/new-image', (req, res) => {
       images.push(image);
     }
   }
-  const post = new models.ImagePostModel({
-    title,
-    images,
+  models.ImageModel.insertMany(images, (err, newImages) => {
+    console.log(err);
+    const imagesIds = newImages.map(x => x.id);
+    if (!err) {
+      const post = new models.ImagePostModel({
+        title,
+        images: imagesIds,
+      });
+
+      post.save((err, newPost) => {
+        console.log(err);
+        if (!err){
+          res.redirect('/image-posts');
+        }
+      });
+      console.log(newImages);
+    }
   })
 
-  console.log(images);
-  console.log(post);
-  res.redirect('/image-posts');
-/*    const caption = req.body.caption;
-    const url = req.body.url;
-    const title = req.body.title;
-
-    const image = new models.ImagePostModel({ title, images });
-    if (req.session.addedImages) {
-        req.session.addedImages.push(image.toObject());
-    }
-    else {
-      req.session.addedImages = [image.toObject()];
-    }
-    image.save(() => res.redirect('/image-posts'));*/
 });
 
 app.listen(3000);

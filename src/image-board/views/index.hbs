@@ -28,7 +28,15 @@
   		</form>
       <br>
 
-      <a href="/image-posts"><center>Home<center></a>
+
+				{{#each posts}}
+				<a href="/image-posts/{{this.slug}}"><h1>{{this.title}}</h1></a>
+					{{#each this.images}}
+					<p>{{this.caption}}</p>
+					<img src="{{this.url}}" alt="{{this.caption}}"/>
+					{{/each}}
+	    	{{/each}}
+
 
 	</body>
 </html>
