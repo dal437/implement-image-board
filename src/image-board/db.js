@@ -7,7 +7,7 @@ const MONGO_URI = 'mongodb://localhost/hw06';
 // my schema goes here!
 const Image = new Schema({
     caption: String,
-    url: String
+    url: {type: String, required: true}
 });
 
 // my schema goes here!
@@ -16,7 +16,7 @@ const ImagePost = new Schema({
     images: [Image]
 });
 
-ImagePost.plugin(URLSlugs("title images"));
+ImagePost.plugin(URLSlugs("title images"), {field: 'title'});
 
 const ImageModel = mongoose.model('Image', Image);
 const ImagePostModel = mongoose.model('ImagePost', ImagePost);

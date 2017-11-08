@@ -5,30 +5,29 @@
 		<title>Document</title>
 	</head>
 	<body>
-		<h1><center><b>480Chan - Image Board!<b><center></h1>
+		<h1><b>480Chan - Image Board!<b></h1>
 			<br>
 			<br>
-      <form method="GET" action="/image-posts">
-        <center>Image Post Title: <input type="text" name="image-posts" required/>
+      <form method="POST" action="/new-image">
+        Image Post Title: <input type="text" name="title">
 					<br>
 					<br>
-					Image 1 URL: <input type="text" name="image-posts" required/>
+					Image 1 URL: <input type="text" name="image-url-1">
+					<label>, Caption: <input type="text" name="caption-1"></label>
 					<br>
 					<br>
-					Image 2 URL: <input type="text" name="image-posts" required/>
+					Image 2 URL: <input type="text" name="image-url-2">
+					<label>, Caption: <input type="text" name="caption-2"></label>
 					<br>
 					<br>
-					Image 3 URL: <input type="text" name="image-posts" required/>
+					Image 3 URL: <input type="text" name="image-url-3">
+					<label>, Caption: <input type="text" name="caption-3"></label>
 					<br>
 					<br>
-  			<input type="submit" value="Add a New Image Post" /><center>
+  			<input type="submit" value="Add a New Image Post" />
   		</form>
       <br>
 
-			<form method="POST" action="/image-posts">
-
-				<ul style="list-style-type: none;">
-  		</ul>
       <a href="/image-posts"><center>Home<center></a>
 
 	</body>
